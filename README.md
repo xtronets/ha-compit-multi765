@@ -22,6 +22,9 @@ bezpieczny zapis wybranych nastaw oraz opcjonalne **sterowanie pogodowe** liczon
   `zadana = zadana przy 0 °C − nachylenie × T_zew (średnia 2 h)`, w granicach min–max,
   z obniżeniem wg dowolnej encji (harmonogram, input_boolean…) i korektą od termostatów.
   Zapis do sterownika tylko przy zmianie ≥ 2 °C i nie częściej niż co 30 min.
+- **Opał:** węgiel w zasobniku (kg), średnie spalanie (kg/h, kg/doba), termin dosypania
+  i moment opróżnienia zasobnika – liczone w HA od ostatniego dosypania, więc prognoza nie „pływa”.
+  Pojemność zasobnika uczy się sama po wpisaniu, ile kg dosypano.
 - **Ponowne logowanie** po zmianie hasła, **diagnostyka** bez danych logowania,
   usługa `compit_multi765.dump_parameters`.
 
@@ -73,6 +76,41 @@ a reszta integracji działa normalnie.
 
 Encja **Zadana wyliczona (pogodowa)** pokazuje wynik krzywej także przy wyłączonym
 sterowaniu – możesz najpierw obserwować, potem włączyć.
+
+## Opał i kalibracja zasobnika
+
+Sterownik zna tylko **poziom paliwa w %**. Liczy go z czasu pracy podajnika
+i parametru **„Pojemność zasobnika” (minuty)**. Integracja dokłada do tego:
+
+| Encja | Opis |
+|---|---|
+| Węgiel w zasobniku | kg = poziom % × pojemność zasobnika (kg) / 100 |
+| Średnie spalanie | kg/h od ostatniego dosypania; atrybuty: %/h, kg/doba, źródło |
+| Termin dosypania | kiedy poziom spadnie do progu dosypania |
+| Zasobnik pusty | kiedy poziom spadnie do 0 % |
+| Pojemność zasobnika (kg) | ile węgla mieści pełny zasobnik (konfiguracja) |
+| Próg dosypania | domyślnie 10 % (konfiguracja) |
+| Dosypano węgla | wpisz, ile kg dosypałeś – służy do kalibracji |
+
+**Jak to działa**
+- Dosypanie jest wykrywane samo, gdy poziom w sterowniku skoczy o co najmniej 10 pkt %.
+  Od tej chwili liczone jest nowe średnie spalanie.
+- Przez pierwsze 6 h po dosypaniu używane jest spalanie z poprzedniego cyklu
+  (przy pierwszym uruchomieniu: wartość domyślna 1,2 %/h).
+
+**Kalibracja – krok po kroku**
+1. Ustaw **Pojemność zasobnika (kg)** na przybliżoną wartość (np. liczba worków × 20 kg).
+2. Przy każdym dosypaniu: dosyp węgiel, ustaw w sterowniku poziom zasobnika
+   (tak jak zwykle), a potem w HA wpisz w **Dosypano węgla** ile kg wsypałeś.
+   Kolejność nie ma znaczenia – wpis czeka do 6 h na skok poziomu i odwrotnie.
+3. Integracja porówna kg ze wzrostem poziomu w % i poprawi pojemność zasobnika
+   (pierwszy pomiar wprost, kolejne uśredniane). Po 2–3 dosypaniach prognoza jest dokładna.
+
+**Dostrojenie sterownika („Pojemność zasobnika” w minutach)**
+- Sterownik pokazuje 0 %, a w zasobniku jest jeszcze węgiel → **zwiększ** minuty.
+- Węgiel kończy się, zanim sterownik pokaże 0 % → **zmniejsz** minuty.
+- Zmieniaj o 5–10 % i obserwuj przez pełny cykl zasobnika. Dopiero gdy sterownik
+  trafia w „pusty”, kalibracja kg w HA ma sens.
 
 ## Uwagi techniczne
 

@@ -51,6 +51,18 @@
       },
       "weather_target": {
         "name": "Weather target setpoint"
+      },
+      "fuel_kg": {
+        "name": "Fuel in hopper"
+      },
+      "fuel_burn": {
+        "name": "Average consumption"
+      },
+      "fuel_refill_at": {
+        "name": "Refill due"
+      },
+      "fuel_empty_at": {
+        "name": "Hopper empty"
       }
     },
     "binary_sensor": {
@@ -121,6 +133,15 @@
       },
       "w_demand": {
         "name": "Valve demand correction"
+      },
+      "fuel_hopper_kg": {
+        "name": "Hopper capacity (kg)"
+      },
+      "fuel_refill_pct": {
+        "name": "Refill threshold"
+      },
+      "fuel_refill_kg": {
+        "name": "Fuel added"
       }
     },
     "button": {

@@ -80,3 +80,16 @@ W_DEMAND_HIGH_FOR_S = 1800  # …przez 30 min
 SWITCHES: dict[str, dict] = {
     "__pracazpodajmikiem": {"key": "feeder_mode", "min": 0, "max": 1, "icon": "mdi:screw-lag"},
 }
+
+# ---------------------------------------------------------------- v1.1 opał
+FUEL_CODE = "__poziompaliwa"
+FUEL_REFILL_JUMP = 10  # skok poziomu ≥ 10 pkt % = dosypanie
+FUEL_MIN_HOURS = 6  # średnia liczona od dosypania dopiero po 6 h
+FUEL_DEFAULT_RATE_PCT_H = 1.2  # zanim cokolwiek zmierzymy
+FUEL_PENDING_MAX_H = 6  # „Dosypano X kg” czeka na skok % najwyżej 6 h
+
+# Nastawy opału (trzymane w HA, nie w sterowniku).
+FUEL_SETTINGS: dict[str, dict] = {
+    "hopper_kg": {"key": "fuel_hopper_kg", "default": 100, "min": 10, "max": 1000, "step": 1, "unit": "kg", "icon": "mdi:silo"},
+    "refill_pct": {"key": "fuel_refill_pct", "default": 10, "min": 5, "max": 50, "step": 1, "unit": "%", "icon": "mdi:gauge-low"},
+}

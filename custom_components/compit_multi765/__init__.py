@@ -44,6 +44,7 @@ from .const import (
     REFRESH_AFTER_WRITE_S,
     SCAN_INTERVAL_SECONDS,
 )
+from .fuel import FuelTracker
 from .weather import WeatherControl
 from .web import CompitFullState
 
@@ -246,6 +247,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = CompitCoordinator(hass, api, device_id, full)
     await coordinator.async_config_entry_first_refresh()
     coordinator.weather = WeatherControl(hass, coordinator, dict(entry.options))
+    coordinator.fuel = FuelTracker(hass, coordinator, entry.entry_id)
+    await coordinator.fuel.async_load()
+    coordinator.fuel.handle_update()
+    entry.async_on_unload(coordinator.async_add_listener(coordinator.fuel.handle_update))
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     coordinator.weather.async_start()

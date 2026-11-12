@@ -10,7 +10,7 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import PERCENTAGE, EntityCategory, UnitOfTemperature
+from homeassistant.const import PERCENTAGE, EntityCategory, UnitOfMass, UnitOfTemperature
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
@@ -32,6 +32,12 @@ async def async_setup_entry(
     ]
     entities.append(CompitParamsSensor(entry))
     entities.append(WeatherTargetSensor(entry))
+    entities += [
+        FuelSensor(entry, "fuel_kg"),
+        FuelSensor(entry, "fuel_burn"),
+        FuelSensor(entry, "fuel_refill_at"),
+        FuelSensor(entry, "fuel_empty_at"),
+    ]
     async_add_entities(entities)
 
 
@@ -123,3 +129,48 @@ class CompitParamsSensor(CompitEntity, SensorEntity):
                 for p in self._params
             },
         }
+
+
+class FuelSensor(CompitEntity, SensorEntity):
+    """Opał liczony w HA: kg, spalanie, terminy."""
+
+    def __init__(self, entry: ConfigEntry, key: str) -> None:
+        super().__init__(entry, "__poziompaliwa", key)
+        self._key = key
+        self._fuel = entry.runtime_data.fuel
+        if key == "fuel_kg":
+            self._attr_device_class = SensorDeviceClass.WEIGHT
+            self._attr_native_unit_of_measurement = UnitOfMass.KILOGRAMS
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_icon = "mdi:sack"
+        elif key == "fuel_burn":
+            self._attr_native_unit_of_measurement = "kg/h"
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_icon = "mdi:fire"
+            self._attr_suggested_display_precision = 2
+        else:
+            self._attr_device_class = SensorDeviceClass.TIMESTAMP
+            self._attr_icon = "mdi:calendar-clock" if key == "fuel_refill_at" else "mdi:calendar-alert"
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(self._fuel.add_listener(self.async_write_ha_state))
+
+    @property
+    def native_value(self):
+        f = self._fuel
+        if self._key == "fuel_kg":
+            return f.fuel_kg()
+        if self._key == "fuel_burn":
+            return f.burn_kg_h()
+        if self._key == "fuel_refill_at":
+            return f.time_at_level(f.settings["refill_pct"])
+        return f.time_at_level(0)
+
+    @property
+    def extra_state_attributes(self):
+        if self._key == "fuel_burn":
+            return self._fuel.attributes()
+        if self._key == "fuel_kg":
+            return {"hopper_kg": self._fuel.settings["hopper_kg"], "calibrations": self._fuel.calibrations}
+        return None

@@ -51,6 +51,18 @@
       },
       "weather_target": {
         "name": "Zadana wyliczona (pogodowa)"
+      },
+      "fuel_kg": {
+        "name": "Węgiel w zasobniku"
+      },
+      "fuel_burn": {
+        "name": "Średnie spalanie"
+      },
+      "fuel_refill_at": {
+        "name": "Termin dosypania"
+      },
+      "fuel_empty_at": {
+        "name": "Zasobnik pusty"
       }
     },
     "binary_sensor": {
@@ -121,6 +133,15 @@
       },
       "w_demand": {
         "name": "Korekta od głowic"
+      },
+      "fuel_hopper_kg": {
+        "name": "Pojemność zasobnika (kg)"
+      },
+      "fuel_refill_pct": {
+        "name": "Próg dosypania"
+      },
+      "fuel_refill_kg": {
+        "name": "Dosypano węgla"
       }
     },
     "button": {
