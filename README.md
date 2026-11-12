@@ -27,9 +27,18 @@ bezpieczny zapis wybranych nastaw oraz opcjonalne **sterowanie pogodowe** liczon
 
 ## Instalacja
 
-### HACS (repozytorium niestandardowe)
+### Katalog społeczności (Home Assistant 2026.11 i nowsze)
+1. **Ustawienia → Katalog społeczności.** Przy pierwszym otwarciu przeczytaj i zaakceptuj komunikat.
+2. Połącz konto GitHub w katalogu – bez tego nie da się dodać repozytorium z linku.
+3. **Dodaj z linku** → wklej `https://github.com/xtronets/ha-compit-multi765`.
+4. Zainstaluj **Compit MULTI 765 (iNext)** i zrestartuj Home Assistant.
+
+### HACS (Home Assistant 2026.10 i starsze)
 1. HACS → ⋮ → *Custom repositories* → `https://github.com/xtronets/ha-compit-multi765`, typ *Integration*.
 2. Zainstaluj **Compit MULTI 765 (iNext)** i zrestartuj Home Assistant.
+
+Jeśli integracja była zainstalowana przez HACS, po aktualizacji do 2026.11 zostanie
+automatycznie przeniesiona do katalogu społeczności.
 
 ### Ręcznie
 Skopiuj katalog `custom_components/compit_multi765` do `config/custom_components/`
