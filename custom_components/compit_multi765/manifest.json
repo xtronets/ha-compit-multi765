@@ -1,0 +1,17 @@
+{
+  "domain": "compit_multi765",
+  "name": "Compit MULTI 765 (iNext)",
+  "codeowners": [
+    "@xtronets"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/xtronets/ha-compit-multi765",
+  "integration_type": "device",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/xtronets/ha-compit-multi765/issues",
+  "loggers": [
+    "custom_components.compit_multi765"
+  ],
+  "requirements": [],
+  "version": "1.0.0"
+}

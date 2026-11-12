@@ -1,0 +1,166 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konto Compit iNext",
+        "description": "Zaloguj się tym samym kontem co na inext.compit.pl. Zapis obejmuje tylko wybrane nastawy, w bezpiecznych zakresach i z kontrolą reguł DTR.",
+        "data": {
+          "email": "E-mail",
+          "password": "Hasło"
+        }
+      },
+      "device": {
+        "title": "Wybierz sterownik",
+        "data": {
+          "device_id": "Sterownik"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate with iNext",
+        "description": "Your Compit iNext credentials no longer work. Enter the current ones.",
+        "data": {
+          "email": "E-mail",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Nieprawidłowy e-mail lub hasło.",
+      "cannot_connect": "Brak połączenia z chmurą Compit.",
+      "no_devices": "Na koncie nie znaleziono żadnych urządzeń.",
+      "unknown": "Nieoczekiwany błąd – sprawdź log."
+    },
+    "abort": {
+      "already_configured": "Ten sterownik jest już dodany.",
+      "reauth_successful": "Re-authentication successful."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "parameters": {
+        "name": "Parametry sterownika"
+      },
+      "boiler_temp": {
+        "name": "Temperatura kotła"
+      },
+      "return_temp": {
+        "name": "Temperatura powrotu"
+      },
+      "fuel_level": {
+        "name": "Poziom paliwa"
+      },
+      "weather_target": {
+        "name": "Weather target setpoint"
+      }
+    },
+    "binary_sensor": {
+      "pump_co": {
+        "name": "Pompa CO"
+      },
+      "pump_cwu": {
+        "name": "Pompa CWU"
+      }
+    },
+    "number": {
+      "boiler_setpoint": {
+        "name": "Temperatura zadana kotła"
+      },
+      "fan1_pmax": {
+        "name": "PID obroty wentylatora moc MAX"
+      },
+      "fan1_pmin": {
+        "name": "PID obroty wentylatora moc MIN"
+      },
+      "cycle_pmax": {
+        "name": "PID czas cyklu moc MAX"
+      },
+      "cycle_pmin": {
+        "name": "PID czas cyklu moc MIN"
+      },
+      "hold_fan1": {
+        "name": "Podtrzymanie obroty wentylatora"
+      },
+      "hold_cycle": {
+        "name": "Podtrzymanie czas cyklu"
+      },
+      "fan2_pmax": {
+        "name": "PID obroty wentylatora 2 moc MAX"
+      },
+      "fan2_pmin": {
+        "name": "PID obroty wentylatora 2 moc MIN"
+      },
+      "hold_fan2": {
+        "name": "Podtrzymanie obroty wentylatora 2"
+      },
+      "return_min": {
+        "name": "Temperatura powrotu MIN"
+      },
+      "boiler_hysteresis": {
+        "name": "Histereza kotła"
+      },
+      "hold_transition": {
+        "name": "Przejście w podtrzymanie"
+      },
+      "hopper_capacity": {
+        "name": "Pojemność zasobnika"
+      },
+      "w_at0": {
+        "name": "Curve: setpoint at 0 °C"
+      },
+      "w_slope": {
+        "name": "Curve: slope"
+      },
+      "w_tmin": {
+        "name": "Curve: minimum"
+      },
+      "w_tmax": {
+        "name": "Curve: maximum"
+      },
+      "w_setback": {
+        "name": "Scheduled setback"
+      },
+      "w_demand": {
+        "name": "Valve demand correction"
+      }
+    },
+    "button": {
+      "controller_read": {
+        "name": "Odśwież ze sterownika"
+      }
+    },
+    "switch": {
+      "weather_control": {
+        "name": "Weather compensation"
+      },
+      "feeder_mode": {
+        "name": "Feeder operation"
+      }
+    }
+  },
+  "services": {
+    "dump_parameters": {
+      "name": "Zrzut parametrów",
+      "description": "Zapisuje pełną listę parametrów sterownika (wartości, zakresy, flaga zapisu) do pliku /config/compit_multi765_dump.json."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Weather compensation",
+        "description": "Pick your own entities. Outdoor temperature can come from a temperature sensor or a weather entity. Without an outdoor source weather compensation stays off; the rest of the integration works normally.",
+        "data": {
+          "weather_outdoor": "Outdoor temperature (sensor or weather)",
+          "weather_fallback": "Fallback source (optional)",
+          "weather_setback": "Setback entity – schedule, input_boolean… (optional)",
+          "weather_climates": "Thermostats for demand correction (optional)"
+        },
+        "data_description": {
+          "weather_outdoor": "Used for the heating curve. °F values are converted to °C.",
+          "weather_fallback": "Used when the main source is unavailable.",
+          "weather_setback": "While this entity is 'on' the setpoint is lowered by the 'Scheduled setback' value.",
+          "weather_climates": "Counts entities with hvac_action = heating. Empty = correction off."
+        }
+      }
+    }
+  }
+}

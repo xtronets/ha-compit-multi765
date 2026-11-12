@@ -1,0 +1,166 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konto Compit iNext",
+        "description": "Zaloguj się tym samym kontem co na inext.compit.pl. Zapis obejmuje tylko wybrane nastawy, w bezpiecznych zakresach i z kontrolą reguł DTR.",
+        "data": {
+          "email": "E-mail",
+          "password": "Hasło"
+        }
+      },
+      "device": {
+        "title": "Wybierz sterownik",
+        "data": {
+          "device_id": "Sterownik"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Ponowne logowanie do iNext",
+        "description": "Hasło do konta Compit iNext przestało działać. Podaj aktualne dane logowania.",
+        "data": {
+          "email": "E-mail",
+          "password": "Hasło"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Nieprawidłowy e-mail lub hasło.",
+      "cannot_connect": "Brak połączenia z chmurą Compit.",
+      "no_devices": "Na koncie nie znaleziono żadnych urządzeń.",
+      "unknown": "Nieoczekiwany błąd – sprawdź log."
+    },
+    "abort": {
+      "already_configured": "Ten sterownik jest już dodany.",
+      "reauth_successful": "Zalogowano ponownie."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "parameters": {
+        "name": "Parametry sterownika"
+      },
+      "boiler_temp": {
+        "name": "Temperatura kotła"
+      },
+      "return_temp": {
+        "name": "Temperatura powrotu"
+      },
+      "fuel_level": {
+        "name": "Poziom paliwa"
+      },
+      "weather_target": {
+        "name": "Zadana wyliczona (pogodowa)"
+      }
+    },
+    "binary_sensor": {
+      "pump_co": {
+        "name": "Pompa CO"
+      },
+      "pump_cwu": {
+        "name": "Pompa CWU"
+      }
+    },
+    "number": {
+      "boiler_setpoint": {
+        "name": "Temperatura zadana kotła"
+      },
+      "fan1_pmax": {
+        "name": "PID obroty wentylatora moc MAX"
+      },
+      "fan1_pmin": {
+        "name": "PID obroty wentylatora moc MIN"
+      },
+      "cycle_pmax": {
+        "name": "PID czas cyklu moc MAX"
+      },
+      "cycle_pmin": {
+        "name": "PID czas cyklu moc MIN"
+      },
+      "hold_fan1": {
+        "name": "Podtrzymanie obroty wentylatora"
+      },
+      "hold_cycle": {
+        "name": "Podtrzymanie czas cyklu"
+      },
+      "fan2_pmax": {
+        "name": "PID obroty wentylatora 2 moc MAX"
+      },
+      "fan2_pmin": {
+        "name": "PID obroty wentylatora 2 moc MIN"
+      },
+      "hold_fan2": {
+        "name": "Podtrzymanie obroty wentylatora 2"
+      },
+      "return_min": {
+        "name": "Temperatura powrotu MIN"
+      },
+      "boiler_hysteresis": {
+        "name": "Histereza kotła"
+      },
+      "hold_transition": {
+        "name": "Przejście w podtrzymanie"
+      },
+      "hopper_capacity": {
+        "name": "Pojemność zasobnika"
+      },
+      "w_at0": {
+        "name": "Krzywa: zadana przy 0 °C"
+      },
+      "w_slope": {
+        "name": "Krzywa: nachylenie"
+      },
+      "w_tmin": {
+        "name": "Krzywa: minimum"
+      },
+      "w_tmax": {
+        "name": "Krzywa: maksimum"
+      },
+      "w_setback": {
+        "name": "Obniżenie wg harmonogramu"
+      },
+      "w_demand": {
+        "name": "Korekta od głowic"
+      }
+    },
+    "button": {
+      "controller_read": {
+        "name": "Odśwież ze sterownika"
+      }
+    },
+    "switch": {
+      "weather_control": {
+        "name": "Sterowanie pogodowe"
+      },
+      "feeder_mode": {
+        "name": "Praca z podajnikiem"
+      }
+    }
+  },
+  "services": {
+    "dump_parameters": {
+      "name": "Zrzut parametrów",
+      "description": "Zapisuje pełną listę parametrów sterownika (wartości, zakresy, flaga zapisu) do pliku /config/compit_multi765_dump.json."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Sterowanie pogodowe",
+        "description": "Wybierz własne encje. Temperatura zewnętrzna może pochodzić z czujnika temperatury albo z encji pogody (np. Met.no, OpenWeatherMap). Bez czujnika zewnętrznego sterowanie pogodowe pozostaje wyłączone, a reszta integracji działa normalnie.\n\nZadana = zadana przy 0 °C − nachylenie × temp. zewnętrzna (średnia 2 h), w granicach min–max; minus obniżenie, gdy encja obniżenia jest włączona; ± korekta, gdy wybrane termostaty długo nie grzeją lub grzeje większość z nich.",
+        "data": {
+          "weather_outdoor": "Temperatura zewnętrzna (czujnik lub pogoda)",
+          "weather_fallback": "Źródło zapasowe (opcjonalnie)",
+          "weather_setback": "Encja obniżenia – harmonogram, input_boolean itp. (opcjonalnie)",
+          "weather_climates": "Termostaty do korekty od odbioru ciepła (opcjonalnie)"
+        },
+        "data_description": {
+          "weather_outdoor": "Używane do krzywej grzewczej. Wartości w °F są przeliczane na °C.",
+          "weather_fallback": "Używane, gdy główne źródło jest niedostępne.",
+          "weather_setback": "Gdy ta encja ma stan „on”, zadana jest obniżana o nastawę „Obniżenie wg harmonogramu”.",
+          "weather_climates": "Liczy się atrybut hvac_action = heating. Puste = korekta wyłączona."
+        }
+      }
+    }
+  }
+}
