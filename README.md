@@ -11,7 +11,7 @@ bezpieczny zapis wybranych nastaw oraz opcjonalne **sterowanie pogodowe** liczon
 <p align="center">
   <img src="docs/karta_kotla.png" alt="Przykładowy panel kotła w Home Assistant" width="460">
 </p>
-<p align="center"><sub>Przykładowy panel zbudowany na encjach integracji: temperatura kotła i powrotu,
+<p align="center"><sub>Karta „Kocioł Compit” dołączona do integracji: temperatura kotła i powrotu,
 zadana z przyciskami −/+, sterowanie pogodowe, podajnik, opał w kg, spalanie i termin dosypania.</sub></p>
 
 ## Funkcje
@@ -82,6 +82,36 @@ a reszta integracji działa normalnie.
 
 Encja **Zadana wyliczona (pogodowa)** pokazuje wynik krzywej także przy wyłączonym
 sterowaniu – możesz najpierw obserwować, potem włączyć.
+
+## Karta „Kocioł Compit”
+
+Integracja sama dodaje do Home Assistanta kartę dashboardu – nie trzeba instalować
+card-mod ani kopiować kodu.
+
+1. Otwórz dashboard → **Edytuj** → **Dodaj kartę** → wyszukaj **„Kocioł Compit”**.
+2. Wybierz sterownik (przy jednym sterowniku wybierze się sam), opcjonalnie wpisz tytuł i podtytuł.
+
+Albo w YAML:
+
+```yaml
+type: custom:compit-boiler-card
+# device: <id urządzenia>   # opcjonalnie, gdy masz kilka sterowników
+title: Kocioł węglowy
+subtitle: Carbo 1 · 25 kW
+```
+
+| Element karty | Działanie |
+|---|---|
+| Kocioł, temperatury, opał, powrót | otwiera historię danej encji |
+| **− / +** przy zadanej | zmienia zadaną o 1 °C; przy włączonym sterowaniu pogodowym przesuwa krzywą grzewczą |
+| **POGODA** | włącza/wyłącza sterowanie pogodowe (widoczne, gdy skonfigurowane) |
+| **PODAJNIK** | włącza/wyłącza pracę z podajnikiem – z potwierdzeniem |
+
+Animacje: płomień w wizjerze (mocniejszy przy pracy, słabszy w podtrzymaniu), dym z komina,
+wentylator, ruch szuflady podajnika, przepływ w rurach zasilania i powrotu, poziom węgla w zasobniku.
+Teksty po polsku lub angielsku – zależnie od języka użytkownika HA.
+
+Po aktualizacji integracji odśwież przeglądarkę (Ctrl+F5), żeby wczytać nową wersję karty.
 
 ## Opał i kalibracja zasobnika
 

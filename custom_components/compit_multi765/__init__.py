@@ -27,6 +27,12 @@ from homeassistant.exceptions import (
 from homeassistant.helpers.event import async_call_later
 
 import time
+from pathlib import Path
+
+from homeassistant.components.frontend import add_extra_js_url
+from homeassistant.components.http import StaticPathConfig
+from homeassistant.helpers import config_validation as cv
+from homeassistant.loader import async_get_integration
 
 import aiohttp
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
@@ -205,6 +211,19 @@ class CompitCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _delayed_refresh(self, _now: Any) -> None:
         await self.async_request_refresh()
+
+
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+CARD_URL = f"/{DOMAIN}/compit-boiler-card.js"
+
+
+async def async_setup(hass: HomeAssistant, config: dict[str, Any]) -> bool:
+    """Udostępnia kartę Lovelace „Kocioł Compit” (custom:compit-boiler-card)."""
+    integration = await async_get_integration(hass, DOMAIN)
+    path = Path(__file__).parent / "frontend" / "compit-boiler-card.js"
+    await hass.http.async_register_static_paths([StaticPathConfig(CARD_URL, str(path), True)])
+    add_extra_js_url(hass, f"{CARD_URL}?v={integration.version}")
+    return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
