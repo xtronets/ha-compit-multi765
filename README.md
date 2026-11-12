@@ -8,6 +8,12 @@ bezpieczny zapis wybranych nastaw oraz opcjonalne **sterowanie pogodowe** liczon
 > Zmiana nastaw kotła na paliwo stałe może wpłynąć na jego pracę i bezpieczeństwo –
 > zawsze kieruj się instrukcją (DTR) swojego kotła.
 
+<p align="center">
+  <img src="docs/karta_kotla.png" alt="Przykładowy panel kotła w Home Assistant" width="460">
+</p>
+<p align="center"><sub>Przykładowy panel zbudowany na encjach integracji: temperatura kotła i powrotu,
+zadana z przyciskami −/+, sterowanie pogodowe, podajnik, opał w kg, spalanie i termin dosypania.</sub></p>
+
 ## Funkcje
 
 - **Czujniki:** temperatura kotła, temperatura powrotu, poziom paliwa (%), stan pomp CO/CWU,
