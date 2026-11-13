@@ -31,6 +31,8 @@ zadana z przyciskami −/+, sterowanie pogodowe, podajnik, opał w kg, spalanie 
 - **Opał:** węgiel w zasobniku (kg), średnie spalanie (kg/h, kg/doba), termin dosypania
   i moment opróżnienia zasobnika – liczone w HA od ostatniego dosypania, więc prognoza nie „pływa”.
   Pojemność zasobnika uczy się sama po wpisaniu, ile kg dosypano.
+- **Profile mocy:** 4 gotowe zestawy nastaw PID (łagodnie / normalnie / mróz / duży mróz),
+  wybór ręczny albo automatyczny wg średniej temperatury zewnętrznej z 6 h.
 - **Ponowne logowanie** po zmianie hasła, **diagnostyka** bez danych logowania,
   usługa `compit_multi765.dump_parameters`.
 
@@ -82,6 +84,29 @@ a reszta integracji działa normalnie.
 
 Encja **Zadana wyliczona (pogodowa)** pokazuje wynik krzywej także przy wyłączonym
 sterowaniu – możesz najpierw obserwować, potem włączyć.
+
+## Profile mocy
+
+Profil to zestaw czterech nastaw PID: **obroty wentylatora MAX/MIN** i **czas cyklu MAX/MIN**.
+Dłuższy cykl = rzadsze podawanie opału = mniej żaru na palenisku. Krótszy cykl i wyższy nadmuch = więcej mocy na mróz.
+
+| Profil | Domyślnie dla T_zew (średnia 6 h) | Wentylator MAX / MIN | Cykl MAX / MIN |
+|---|---|---|---|
+| Łagodnie | powyżej 5 °C | 31 / 20 % | 270 / 430 s |
+| Normalnie | −5 … 5 °C | 31 / 20 % | 250 / 400 s |
+| Mróz | −12 … −5 °C | 33 / 22 % | 230 / 380 s |
+| Duży mróz | poniżej −12 °C | 34 / 23 % | 220 / 360 s |
+
+> Wartości domyślne pochodzą z kotła Kotrem Carbo 1 25 kW na ekogroszku. **Dostrój je do swojego kotła**
+> (encje „Profil …” w sekcji *Konfiguracja* urządzenia) – zmiana wartości aktywnego profilu trafia od razu do sterownika.
+
+- **Profil mocy** (select) – wybór ręczny; wyłącza tryb automatyczny.
+- **Profil mocy: auto wg pogody** – dobiera profil sam: średnia z 6 h, histereza 2 °C wokół każdego progu,
+  najwyżej jedna zmiana na 3 h. Wymaga czujnika temperatury zewnętrznej w opcjach integracji.
+- Progi między profilami: encje „Profil: próg …” (°C).
+- Nastawy są zapisywane w kolejności zgodnej z DTR (wentylator MAX > MIN, cykl MIN ≥ cykl MAX + 60 s).
+- Atrybuty encji wyboru: średnia temperatura, sugerowany profil, czy sterownik ma nastawy profilu
+  (`matches_controller` – `false`, gdy ktoś zmienił je ręcznie), ostatnia zmiana i jej powód.
 
 ## Karta „Kocioł Compit”
 

@@ -51,11 +51,19 @@ from .const import (
     SCAN_INTERVAL_SECONDS,
 )
 from .fuel import FuelTracker
+from .power import PowerProfiles
 from .weather import WeatherControl
 from .web import CompitFullState
 
 _LOGGER = logging.getLogger(__name__)
-PLATFORMS = [Platform.SENSOR, Platform.BINARY_SENSOR, Platform.NUMBER, Platform.BUTTON, Platform.SWITCH]
+PLATFORMS = [
+    Platform.SENSOR,
+    Platform.BINARY_SENSOR,
+    Platform.NUMBER,
+    Platform.BUTTON,
+    Platform.SWITCH,
+    Platform.SELECT,
+]
 
 
 class CompitCoordinator(DataUpdateCoordinator[dict[str, Any]]):
@@ -270,10 +278,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await coordinator.fuel.async_load()
     coordinator.fuel.handle_update()
     entry.async_on_unload(coordinator.async_add_listener(coordinator.fuel.handle_update))
+    coordinator.power = PowerProfiles(hass, coordinator, entry.entry_id)
+    await coordinator.power.async_load()
     entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     coordinator.weather.async_start()
     entry.async_on_unload(coordinator.weather.async_stop)
+    coordinator.power.async_start()
+    entry.async_on_unload(coordinator.power.async_stop)
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
     async def handle_dump(call: ServiceCall) -> dict[str, Any]:

@@ -93,3 +93,26 @@ FUEL_SETTINGS: dict[str, dict] = {
     "hopper_kg": {"key": "fuel_hopper_kg", "default": 100, "min": 10, "max": 1000, "step": 1, "unit": "kg", "icon": "mdi:silo"},
     "refill_pct": {"key": "fuel_refill_pct", "default": 10, "min": 5, "max": 50, "step": 1, "unit": "%", "icon": "mdi:gauge-low"},
 }
+
+# ---------------------------------------------------------------- v1.3 profile mocy
+# Pola profilu = klucze z NUMBERS (wentylator 1 MAX/MIN, czasy cyklu MAX/MIN).
+P_FIELDS = ("fan1_pmax", "fan1_pmin", "cycle_pmax", "cycle_pmin")
+# Kolejność: od najcieplejszego do najzimniejszego. Wartości domyślne dobrane
+# na kotle Carbo 1 25 kW z ekogroszkiem – dostrój je do swojego kotła.
+P_PROFILES: dict[str, dict] = {
+    "mild": {"defaults": {"fan1_pmax": 31, "fan1_pmin": 20, "cycle_pmax": 270, "cycle_pmin": 430}},
+    "normal": {"defaults": {"fan1_pmax": 31, "fan1_pmin": 20, "cycle_pmax": 250, "cycle_pmin": 400}},
+    "frost": {"defaults": {"fan1_pmax": 33, "fan1_pmin": 22, "cycle_pmax": 230, "cycle_pmin": 380}},
+    "severe": {"defaults": {"fan1_pmax": 34, "fan1_pmin": 23, "cycle_pmax": 220, "cycle_pmin": 360}},
+}
+# Granice między profilami (średnia temp. zewnętrzna z 6 h), malejąco.
+P_THRESHOLDS: dict[str, dict] = {
+    "mild_normal": {"key": "p_th_mild_normal", "default": 5, "min": -10, "max": 20},
+    "normal_frost": {"key": "p_th_normal_frost", "default": -5, "min": -20, "max": 10},
+    "frost_severe": {"key": "p_th_frost_severe", "default": -12, "min": -30, "max": 0},
+}
+P_TICK_S = 300  # próbkowanie temp. zewnętrznej co 5 min
+P_AVG_WINDOW_S = 6 * 3600  # średnia z 6 h
+P_MIN_AVG_SPAN_S = 3600  # automat rusza, gdy jest ≥ 1 h próbek
+P_HYSTERESIS = 2  # °C – pas histerezy wokół każdej granicy
+P_MIN_SWITCH_GAP_S = 3 * 3600  # automat zmienia profil najwyżej raz na 3 h

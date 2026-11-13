@@ -1,4 +1,4 @@
-"""Przełącznik „Sterowanie pogodowe”."""
+"""Przełączniki: sterowanie pogodowe, parametry TAK/NIE, automatyczny profil mocy."""
 
 from __future__ import annotations
 
@@ -21,6 +21,7 @@ async def async_setup_entry(
 ) -> None:
     entities: list[SwitchEntity] = [WeatherSwitch(entry)]
     entities += [CompitParamSwitch(entry, code, spec) for code, spec in SWITCHES.items()]
+    entities.append(PowerAutoSwitch(entry))
     async_add_entities(entities)
 
 
@@ -74,3 +75,27 @@ class CompitParamSwitch(CompitEntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         await self.coordinator.async_write(self._code, 0)
+
+
+class PowerAutoSwitch(CompitEntity, SwitchEntity):
+    """Automatyczny dobór profilu mocy wg średniej temperatury zewnętrznej (6 h)."""
+
+    _attr_icon = "mdi:thermometer-auto"
+
+    def __init__(self, entry: ConfigEntry) -> None:
+        super().__init__(entry, "__pidczascyklu", "power_profile_auto")
+        self._pp = entry.runtime_data.power
+
+    async def async_added_to_hass(self) -> None:
+        await super().async_added_to_hass()
+        self.async_on_remove(self._pp.add_listener(self.async_write_ha_state))
+
+    @property
+    def is_on(self) -> bool:
+        return self._pp.auto
+
+    async def async_turn_on(self, **kwargs: Any) -> None:
+        await self._pp.async_set_auto(True)
+
+    async def async_turn_off(self, **kwargs: Any) -> None:
+        await self._pp.async_set_auto(False)

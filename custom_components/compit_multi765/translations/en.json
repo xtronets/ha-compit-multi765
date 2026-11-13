@@ -142,6 +142,63 @@
       },
       "fuel_refill_kg": {
         "name": "Fuel added"
+      },
+      "p_mild_fan1_pmax": {
+        "name": "Profile Mild: fan MAX"
+      },
+      "p_mild_fan1_pmin": {
+        "name": "Profile Mild: fan MIN"
+      },
+      "p_mild_cycle_pmax": {
+        "name": "Profile Mild: cycle time MAX"
+      },
+      "p_mild_cycle_pmin": {
+        "name": "Profile Mild: cycle time MIN"
+      },
+      "p_normal_fan1_pmax": {
+        "name": "Profile Normal: fan MAX"
+      },
+      "p_normal_fan1_pmin": {
+        "name": "Profile Normal: fan MIN"
+      },
+      "p_normal_cycle_pmax": {
+        "name": "Profile Normal: cycle time MAX"
+      },
+      "p_normal_cycle_pmin": {
+        "name": "Profile Normal: cycle time MIN"
+      },
+      "p_frost_fan1_pmax": {
+        "name": "Profile Frost: fan MAX"
+      },
+      "p_frost_fan1_pmin": {
+        "name": "Profile Frost: fan MIN"
+      },
+      "p_frost_cycle_pmax": {
+        "name": "Profile Frost: cycle time MAX"
+      },
+      "p_frost_cycle_pmin": {
+        "name": "Profile Frost: cycle time MIN"
+      },
+      "p_severe_fan1_pmax": {
+        "name": "Profile Severe frost: fan MAX"
+      },
+      "p_severe_fan1_pmin": {
+        "name": "Profile Severe frost: fan MIN"
+      },
+      "p_severe_cycle_pmax": {
+        "name": "Profile Severe frost: cycle time MAX"
+      },
+      "p_severe_cycle_pmin": {
+        "name": "Profile Severe frost: cycle time MIN"
+      },
+      "p_th_mild_normal": {
+        "name": "Profile: threshold Mild / Normal"
+      },
+      "p_th_normal_frost": {
+        "name": "Profile: threshold Normal / Frost"
+      },
+      "p_th_frost_severe": {
+        "name": "Profile: threshold Frost / Severe"
       }
     },
     "button": {
@@ -155,6 +212,20 @@
       },
       "feeder_mode": {
         "name": "Feeder operation"
+      },
+      "power_profile_auto": {
+        "name": "Power profile: auto by weather"
+      }
+    },
+    "select": {
+      "power_profile": {
+        "name": "Power profile",
+        "state": {
+          "mild": "Mild",
+          "normal": "Normal",
+          "frost": "Frost",
+          "severe": "Severe frost"
+        }
       }
     }
   },

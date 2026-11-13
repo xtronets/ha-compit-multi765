@@ -18,6 +18,7 @@ async def async_get_config_entry_diagnostics(
     coordinator = entry.runtime_data
     data = coordinator.data or {}
     weather = getattr(coordinator, "weather", None)
+    power = getattr(coordinator, "power", None)
     return {
         "entry": {
             "data": async_redact_data(dict(entry.data), TO_REDACT),
@@ -37,4 +38,5 @@ async def async_get_config_entry_diagnostics(
             if p
         },
         "weather_control": None if weather is None else weather.state,
+        "power_profile": None if power is None else {"active": power.active, **power.attributes()},
     }
