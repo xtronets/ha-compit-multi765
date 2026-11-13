@@ -104,7 +104,11 @@ P_PROFILES: dict[str, dict] = {
     "normal": {"defaults": {"fan1_pmax": 31, "fan1_pmin": 20, "cycle_pmax": 250, "cycle_pmin": 400}},
     "frost": {"defaults": {"fan1_pmax": 33, "fan1_pmin": 22, "cycle_pmax": 230, "cycle_pmin": 380}},
     "severe": {"defaults": {"fan1_pmax": 34, "fan1_pmin": 23, "cycle_pmax": 220, "cycle_pmin": 360}},
+    # Nastawy fabryczne z DTR Carbo 1 (tabela 8.3, kolumna 25 kW) – tylko do wyboru ręcznego.
+    "factory": {"auto": False, "defaults": {"fan1_pmax": 40, "fan1_pmin": 22, "cycle_pmax": 190, "cycle_pmin": 320}},
 }
+# Profile, między którymi przełącza automat (od najcieplejszego do najzimniejszego).
+P_AUTO_ORDER = tuple(p for p, v in P_PROFILES.items() if v.get("auto", True))
 # Granice między profilami (średnia temp. zewnętrzna z 6 h), malejąco.
 P_THRESHOLDS: dict[str, dict] = {
     "mild_normal": {"key": "p_th_mild_normal", "default": 5, "min": -10, "max": 20},

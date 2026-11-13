@@ -1,6 +1,7 @@
 """Profile mocy: gotowe zestawy nastaw PID (wentylator MAX/MIN + czasy cyklu).
 
-* 4 profile (łagodnie / normalnie / mróz / duży mróz), wartości edytowalne w HA.
+* 4 profile (łagodnie / normalnie / mróz / duży mróz) + „fabryczny” z DTR
+  (tylko do wyboru ręcznego), wartości edytowalne w HA.
 * Wybór ręczny (encja select) albo automatyczny wg średniej temperatury
   zewnętrznej z 6 h – z histerezą i minimalnym odstępem między zmianami.
 * Zapis do sterownika w kolejności, która nie łamie reguł DTR
@@ -27,6 +28,7 @@ from .const import (
     DOMAIN,
     MIN_CYCLE_GAP_S,
     NUMBERS,
+    P_AUTO_ORDER,
     P_AVG_WINDOW_S,
     P_FIELDS,
     P_HYSTERESIS,
@@ -127,7 +129,7 @@ class PowerProfiles:
 
     def matching_profile(self) -> str | None:
         cur = self.controller_values()
-        for p, vals in self.values.items():
+        for p, vals in self.values.items():  # przy identycznych wartościach wygrywa wcześniejszy
             if all(cur[f] is not None and int(cur[f]) == int(vals[f]) for f in P_FIELDS):
                 return p
         return None
@@ -149,7 +151,7 @@ class PowerProfiles:
 
     def profile_for(self, t: float, current: str | None) -> str:
         """Profil dla temperatury t – z histerezą względem bieżącego profilu."""
-        order = list(P_PROFILES)  # od najcieplejszego do najzimniejszego
+        order = list(P_AUTO_ORDER)  # od najcieplejszego do najzimniejszego; bez „fabrycznego”
         bounds = [self.thresholds[k] for k in P_THRESHOLDS]  # malejąco
         raw = sum(1 for b in bounds if t < b)
         if current not in order:

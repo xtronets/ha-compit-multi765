@@ -199,6 +199,18 @@
       },
       "p_th_frost_severe": {
         "name": "Profil: próg Mróz / Duży mróz"
+      },
+      "p_factory_fan1_pmax": {
+        "name": "Profil Fabryczny (DTR): wentylator MAX"
+      },
+      "p_factory_fan1_pmin": {
+        "name": "Profil Fabryczny (DTR): wentylator MIN"
+      },
+      "p_factory_cycle_pmax": {
+        "name": "Profil Fabryczny (DTR): czas cyklu MAX"
+      },
+      "p_factory_cycle_pmin": {
+        "name": "Profil Fabryczny (DTR): czas cyklu MIN"
       }
     },
     "button": {
@@ -224,7 +236,8 @@
           "mild": "Łagodnie",
           "normal": "Normalnie",
           "frost": "Mróz",
-          "severe": "Duży mróz"
+          "severe": "Duży mróz",
+          "factory": "Fabryczny (DTR)"
         }
       }
     }

@@ -199,6 +199,18 @@
       },
       "p_th_frost_severe": {
         "name": "Profile: threshold Frost / Severe"
+      },
+      "p_factory_fan1_pmax": {
+        "name": "Profile Factory (manual): fan MAX"
+      },
+      "p_factory_fan1_pmin": {
+        "name": "Profile Factory (manual): fan MIN"
+      },
+      "p_factory_cycle_pmax": {
+        "name": "Profile Factory (manual): cycle time MAX"
+      },
+      "p_factory_cycle_pmin": {
+        "name": "Profile Factory (manual): cycle time MIN"
       }
     },
     "button": {
@@ -224,7 +236,8 @@
           "mild": "Mild",
           "normal": "Normal",
           "frost": "Frost",
-          "severe": "Severe frost"
+          "severe": "Severe frost",
+          "factory": "Factory (manual)"
         }
       }
     }

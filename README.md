@@ -31,7 +31,7 @@ zadana z przyciskami −/+, sterowanie pogodowe, podajnik, opał w kg, spalanie 
 - **Opał:** węgiel w zasobniku (kg), średnie spalanie (kg/h, kg/doba), termin dosypania
   i moment opróżnienia zasobnika – liczone w HA od ostatniego dosypania, więc prognoza nie „pływa”.
   Pojemność zasobnika uczy się sama po wpisaniu, ile kg dosypano.
-- **Profile mocy:** 4 gotowe zestawy nastaw PID (łagodnie / normalnie / mróz / duży mróz),
+- **Profile mocy:** 4 gotowe zestawy nastaw PID (łagodnie / normalnie / mróz / duży mróz) i fabryczny z DTR,
   wybór ręczny albo automatyczny wg średniej temperatury zewnętrznej z 6 h.
 - **Ponowne logowanie** po zmianie hasła, **diagnostyka** bez danych logowania,
   usługa `compit_multi765.dump_parameters`.
@@ -96,8 +96,12 @@ Dłuższy cykl = rzadsze podawanie opału = mniej żaru na palenisku. Krótszy c
 | Normalnie | −5 … 5 °C | 31 / 20 % | 250 / 400 s |
 | Mróz | −12 … −5 °C | 33 / 22 % | 230 / 380 s |
 | Duży mróz | poniżej −12 °C | 34 / 23 % | 220 / 360 s |
+| Fabryczny (DTR) | tylko ręcznie | 40 / 22 % | 190 / 320 s |
 
-> Wartości domyślne pochodzą z kotła Kotrem Carbo 1 25 kW na ekogroszku. **Dostrój je do swojego kotła**
+> „Fabryczny (DTR)” to nastawy producenta z instrukcji Carbo 1 (tabela 8.3, 25 kW) – punkt startu lub powrót
+> do ustawień fabrycznych; automat nigdy go nie wybiera. Dla innej mocy kotła wpisz wartości z tabeli w DTR.
+>
+> Pozostałe wartości domyślne pochodzą z kotła Kotrem Carbo 1 25 kW na ekogroszku. **Dostrój je do swojego kotła**
 > (encje „Profil …” w sekcji *Konfiguracja* urządzenia) – zmiana wartości aktywnego profilu trafia od razu do sterownika.
 
 - **Profil mocy** (select) – wybór ręczny; wyłącza tryb automatyczny.
