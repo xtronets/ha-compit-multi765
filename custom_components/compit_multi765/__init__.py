@@ -14,7 +14,7 @@ from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_EMAIL, CONF_PASSWORD, Platform
-from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse
+from homeassistant.core import HomeAssistant, ServiceCall, SupportsResponse, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
@@ -48,6 +48,8 @@ from .const import (
     NUMBERS,
     SWITCHES,
     REFRESH_AFTER_WRITE_S,
+    WRITE_HOLD_S,
+    CONTROLLER_READ_INTERVAL_S,
     SCAN_INTERVAL_SECONDS,
 )
 from .fuel import FuelTracker
@@ -90,6 +92,8 @@ class CompitCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self._full_ts: float = 0.0
         self._force_full = True
         self._base_codes: set[str] = set()
+        self._pending: dict[str, tuple[Any, float]] = {}
+        self._last_ctrl_read: float = 0.0
 
     async def _async_update_data(self) -> dict[str, Any]:
         try:
@@ -119,12 +123,48 @@ class CompitCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         merged = dict(self._full_params)
         for p in base:  # stan podstawowy jest świeższy – nadpisuje kopię pełną
             merged[p["code"]] = p
+        self._apply_pending(merged)
+        self._maybe_controller_read()
         return {
             **state,
             **self._full_meta,
             "full_mode": self.full.mode if self.full else None,
             "params": list(merged.values()),
         }
+
+    def _apply_pending(self, merged: dict[str, dict[str, Any]]) -> None:
+        """Świeżo zapisane wartości wygrywają z nieaktualną kopią w chmurze."""
+        now = time.monotonic()
+        for code, (value, ts) in list(self._pending.items()):
+            p = merged.get(code)
+            if now - ts > WRITE_HOLD_S or p is None:
+                if p is not None and p.get("value") != value:
+                    _LOGGER.warning(
+                        "Compit MULTI765: %s – po zapisie %s sterownik nadal zgłasza %s",
+                        code, value, p.get("value"),
+                    )
+                self._pending.pop(code, None)
+            elif p.get("value") == value:
+                self._pending.pop(code, None)  # potwierdzone
+            else:
+                merged[code] = {**p, "value": value}
+
+    @callback
+    def _maybe_controller_read(self) -> None:
+        """Co godzinę zleca bramce odczyt wszystkich parametrów (kopia w chmurze się starzeje)."""
+        if self.full is None or time.monotonic() - self._last_ctrl_read < CONTROLLER_READ_INTERVAL_S:
+            return
+        self._last_ctrl_read = time.monotonic()
+        self.hass.async_create_background_task(self._async_quiet_controller_read(), f"{DOMAIN}_controller_read")
+
+    async def _async_quiet_controller_read(self) -> None:
+        try:
+            await self.full.request_controller_read()
+        except CompitError as err:
+            _LOGGER.debug("Compit MULTI765: odczyt ze sterownika nieudany: %s", err)
+            return
+        for delay in FULL_READ_WAIT_S:
+            async_call_later(self.hass, delay, self._delayed_full_refresh)
 
     async def async_controller_read(self) -> None:
         """„Pobierz grupę”: bramka czyta parametry ze sterownika, potem odświeżamy."""
@@ -202,8 +242,13 @@ class CompitCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 await self.full.set_parameter(code, value)
         except CompitError as err:
             raise HomeAssistantError(str(err)) from err
-        if code not in self._base_codes:
-            self._force_full = True
+        self._pending[code] = (value, time.monotonic())
+        if code not in self._base_codes and self.full is not None:
+            # Kopia w chmurze zna nową wartość dopiero po odczycie ze sterownika.
+            self._last_ctrl_read = time.monotonic()
+            self.hass.async_create_background_task(
+                self._async_quiet_controller_read(), f"{DOMAIN}_controller_read"
+            )
 
         self.hass.bus.async_fire(
             f"{DOMAIN}_parameter_set",

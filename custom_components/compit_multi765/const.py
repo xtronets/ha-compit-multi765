@@ -42,6 +42,12 @@ MIN_CYCLE_GAP_S = 60  # czas cyklu Pmin musi być dłuższy od Pmax o co najmnie
 
 # Po zapisie chmura przekazuje wartość do sterownika z opóźnieniem – odświeżamy stan.
 REFRESH_AFTER_WRITE_S = (30, 90)
+# Chmura oddaje starą wartość jeszcze przez chwilę po zapisie – przez ten czas
+# pokazujemy wartość zapisaną, chyba że odczyt już ją potwierdzi.
+WRITE_HOLD_S = 300
+# Kopia pełnego stanu w chmurze odświeża się tylko po „Pobierz grupę” –
+# zlecamy ją sami co godzinę (i po każdym zapisie parametru spoza stanu podstawowego).
+CONTROLLER_READ_INTERVAL_S = 3600
 
 # ---------------------------------------------------------------- v0.3 pogodówka
 CONF_W_OUTDOOR = "weather_outdoor"
