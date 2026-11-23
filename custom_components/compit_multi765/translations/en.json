@@ -211,6 +211,12 @@
       },
       "p_factory_cycle_pmin": {
         "name": "Profile Factory (manual): cycle time MIN"
+      },
+      "hold_fan1_time": {
+        "name": "Hold fan run time"
+      },
+      "hold_fan2_time": {
+        "name": "Hold fan 2 run time"
       }
     },
     "button": {

@@ -211,6 +211,12 @@
       },
       "p_factory_cycle_pmin": {
         "name": "Profil Fabryczny (DTR): czas cyklu MIN"
+      },
+      "hold_fan1_time": {
+        "name": "Podtrzymanie czas pracy wentylatora"
+      },
+      "hold_fan2_time": {
+        "name": "Podtrzymanie czas pracy wentylatora 2"
       }
     },
     "button": {

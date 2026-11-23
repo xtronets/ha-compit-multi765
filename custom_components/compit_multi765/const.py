@@ -29,6 +29,9 @@ NUMBERS: dict[str, dict] = {
     "__tpowrotmin": {"key": "return_min", "min": 44, "max": 60, "step": 1, "unit": "°C", "icon": "mdi:thermometer-chevron-up"},
     "__histerezakotla": {"key": "boiler_hysteresis", "min": 1, "max": 5, "step": 1, "unit": "°C", "icon": "mdi:arrow-expand-vertical"},
     "__przejsciewpodtrzymanie": {"key": "hold_transition", "min": 1, "max": 10, "step": 1, "unit": "°C", "icon": "mdi:swap-vertical"},
+    # v1.3.2 – podtrzymanie: jak długo pracują wentylatory po podaniu porcji
+    "__podtrzymanieczaswent1": {"key": "hold_fan1_time", "min": 10, "max": 120, "step": 5, "unit": "s", "icon": "mdi:fan-clock"},
+    "__podtrzymanieczaswent2": {"key": "hold_fan2_time", "min": 10, "max": 180, "step": 5, "unit": "s", "icon": "mdi:fan-clock"},
     "__pojemnosczasobnika": {"key": "hopper_capacity", "min": 200, "max": 1000, "step": 1, "unit": "min", "icon": "mdi:silo"},
 }
 

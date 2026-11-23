@@ -20,7 +20,7 @@ zadana z przyciskami −/+, sterowanie pogodowe, podajnik, opał w kg, spalanie 
   diagnostyczna lista wszystkich parametrów sterownika (~119).
 - **Nastawy (zapis):** temperatura zadana kotła, obroty wentylatorów (PID moc MAX/MIN,
   wentylator 2), czasy cyklu, podtrzymanie, temperatura powrotu MIN, histereza,
-  przejście w podtrzymanie, pojemność zasobnika, praca z podajnikiem.
+  przejście w podtrzymanie, czas pracy wentylatorów w podtrzymaniu, pojemność zasobnika, praca z podajnikiem.
   - Zakresy są celowo **węższe** niż w sterowniku.
   - Przed zapisem sprawdzane są reguły z DTR (np. moc MAX > moc MIN, czas cyklu Pmin ≥ Pmax + 60 s).
 - **Przycisk „Odśwież ze sterownika”** – odpowiednik „Pobierz grupę” w panelu iNext.
